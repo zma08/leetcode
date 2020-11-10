@@ -1,0 +1,15 @@
+class Solution {
+    public int reverse(int x) {
+        int sign = x<0?-1:1;
+        
+        String target = new StringBuilder().append(Math.abs(x)).reverse().toString();
+        try{
+            int result = sign*Integer.parseInt(target);  
+            return result;
+        }catch(Exception e){
+            return 0;
+        }
+        
+        
+    }
+}

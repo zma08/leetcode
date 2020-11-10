@@ -1,0 +1,21 @@
+class Solution {
+    String[] map = new String[]{"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    List<String>result_list = new ArrayList<>();
+    public List<String> letterCombinations(String digits) {
+        if(digits.length()==0)return result_list;
+        helper(digits,"",0);
+        return result_list;
+    }
+    
+    public void helper(String d, String current, int i){
+        if(i==d.length()){
+            result_list.add(current);
+            return;
+        }
+        int index = d.charAt(i)-'0';
+        String currentStrs = map[index];
+        for(char c: currentStrs.toCharArray()){
+            helper(d,current+c,i+1);
+        }
+    }
+}

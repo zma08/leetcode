@@ -1,0 +1,49 @@
+class FreqStack {
+    //HashMap will keep track of each element frequency
+    //ArrayList to help maintain the sequence
+    //Stack help with the order of item
+    List<Stack<Integer>>stacks;
+    HashMap<Integer,Integer>map;
+    public FreqStack() {
+        stacks = new ArrayList<Stack<Integer>>();
+        //fill the 0 frequency for the list, so the size will fit and frequency will match the index
+        Stack<Integer>stack = new Stack<>();
+        stacks.add(0,stack);
+        map = new HashMap<>();
+    }
+    
+    public void push(int x) {
+        map.put(x,map.getOrDefault(x,0)+1);
+        int fre = map.get(x);
+        if(fre>stacks.size()-1){
+            Stack<Integer>current = new Stack<>();
+            current.push(x);
+            stacks.add(current);
+        }else{
+            Stack<Integer>current = stacks.get(fre);
+            current.push(x);
+        }
+    }
+    
+    public int pop() {
+        if(stacks.isEmpty())
+            return 0;
+        Stack<Integer>stack = stacks.get(stacks.size()-1);
+        int x = stack.pop();
+        if(stack.isEmpty()){
+            stacks.remove(stacks.size()-1);//arraylist remove by the index!!!!!!!
+        }
+        int newfreq = map.get(x)-1;
+        map.put(x,newfreq);
+        if(map.get(x)==0)map.remove(x);//map will remove by the key
+               
+        return x;
+    }
+}
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack obj = new FreqStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ */

@@ -1,0 +1,23 @@
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        HashMap<Character, Integer>map = new HashMap<>();
+        List<Integer>list = new ArrayList<>();
+        for(int k=0;k<S.length();k++){
+            map.put(S.charAt(k),k);
+        }
+        
+        int i = 0;
+        while(i<S.length()){
+            int end = map.get(S.charAt(i));
+            for(int j=i+1;j<end;j++){
+                int newEnd = map.get(S.charAt(j));
+                if(newEnd>end)
+                    end = newEnd;
+            }
+            list.add(end-i+1);
+            i = end+1;
+       
+        }
+        return list;
+    }
+}

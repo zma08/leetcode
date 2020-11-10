@@ -1,0 +1,43 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        //bfs need to loop thru each word and the words one step took to be transformed to 
+        //hashset for quick look up
+        
+        HashSet<String>set = new HashSet<>();
+        set.addAll(wordList);
+        if(!set.contains(endWord))return 0;
+        set.remove(endWord);
+        set.remove(beginWord);
+        Queue<String>q = new LinkedList<>();
+        q.add(beginWord);
+        
+        int count = 0;
+        while(!q.isEmpty()){           
+            int size = q.size();
+ 	    ++count;
+            for(int i=0;i<size;i++){
+                String word = q.poll();
+                char[]w = word.toCharArray();
+                for(int j=0;j<w.length;j++){
+                    //cache the char before it changes so swap back after looping thru 'a'-'z'
+                    //next loop with start as original word for current layer
+                    char o = w[j];
+                    for(char c='a';c<='z';c++){
+                        if(w[j]==c)continue;
+                        w[j]=c;
+                        String newW = new String(w);
+                        //if found return
+                        if(endWord.equals(newW))return ++count;//this is another word so increment the count
+                        
+                        if(set.contains(newW)){
+                            set.remove(newW);
+                            q.add(newW);
+                        }
+                    }
+                    w[j]=o;
+                }
+            }
+        }
+        return 0;
+    }
+}

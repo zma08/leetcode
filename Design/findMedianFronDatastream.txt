@@ -1,0 +1,51 @@
+class MedianFinder {
+
+    /** initialize your data structure here. */
+    // I need maintain 2 heap, min and max
+    //min on desc order, max is on asc order
+    PriorityQueue<Integer>min, max;
+
+    public MedianFinder() {
+        min = new PriorityQueue<Integer>((a,b)->b-a);
+        max = new PriorityQueue<Integer>();
+    }
+    
+    public void addNum(int num) {        
+        if(min.isEmpty()|| num<min.peek())
+            min.add(num);
+        else 
+            max.add(num);
+        //everytime add a num we need to rebalance the 2 heap so that their diff less than 2
+        balance(min,max);
+    }
+    
+    public double findMedian() {
+        //need to know who has the most elements first
+        PriorityQueue<Integer>[] heaps = compare(min,max);
+        if(heaps[0].size()==heaps[1].size())
+            return ((double)heaps[0].peek()+heaps[1].peek())/2;
+        else//return the heap has more elements
+            return heaps[1].peek();
+    }
+    public PriorityQueue<Integer>[] compare(PriorityQueue<Integer>min, PriorityQueue<Integer>max){
+        if(min.size()>max.size())
+            return new PriorityQueue[]{max,min};
+        else
+            return new PriorityQueue[]{min,max};
+    }
+    public void balance(PriorityQueue<Integer>min, PriorityQueue<Integer>max){
+        PriorityQueue[]heaps = compare(min,max);
+        PriorityQueue<Integer>more = heaps[1];
+        PriorityQueue<Integer>less = heaps[0];
+        if(more.size()-less.size()>1){
+            less.add(more.poll());
+        }
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */

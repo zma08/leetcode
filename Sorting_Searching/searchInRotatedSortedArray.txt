@@ -1,0 +1,35 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        //first find the pivot, smallest element among
+        int pivot = helper(nums);
+        //set up the pointer, find the correct part
+        int l = 0, r = nums.length-1;
+        if(target>nums[r])
+            r = pivot-1;
+        else
+            l = pivot;
+        
+        while(l<=r){
+            int m = (l+r)/2;
+            if(nums[m]==target)return m;
+            else if(nums[m]>target)
+                r = m-1;
+            else
+                l = m+1;
+        }
+        return -1;
+    }
+    
+    public int helper(int[]arr){
+        int l = 0, r = arr.length-1;
+        while(l<r){
+            int m = (l+r)/2;
+            //***** remember to compare to the right part because I am looking for the smallest element
+            if(arr[m]>arr[r])
+                l = m+1;
+            else
+                r = m;
+        }
+        return r;
+    }
+}

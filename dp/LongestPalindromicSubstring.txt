@@ -1,0 +1,22 @@
+class Solution {
+    int[]info = new int[2];
+    public String longestPalindrome(String s) {
+        //loop thru the string and expand from each char within s, find the longest substring and starting index
+        for(int i=0;i<s.length();i++){
+            helper(i,i,s);
+            helper(i,i+1,s);
+        }
+        return s.substring(info[0],info[0]+info[1]);
+    }
+    public void helper(int i, int j, String s){
+        while(i>=0&&j<=s.length()-1&&s.charAt(i)==s.charAt(j)){
+            int len = j-i+1;
+            if(len>info[1]){
+                info[0]=i;
+                info[1]=len;
+            }
+            i--;
+            j++;
+        }
+    }
+}

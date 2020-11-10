@@ -1,0 +1,35 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        int[][]template = new int[7][];
+        template[0] = transform(cells);
+      
+        for(int i=1;i<template.length;i++){
+            template[i]=transform(template[i-1]);
+        }
+        int row = (N-1)%7;
+        int pattern = (N-1)/7%2;
+        if(pattern!=0){
+            int[] r = reverse(template[row]);
+            return r;
+        }else
+            return template[row];
+    }
+    public int[] transform(int[] c){
+        int[]holder = new int[c.length];
+        for(int i=1;i<c.length-1;i++){
+            holder[i]= c[i-1]==c[i+1]?1:0;
+        }
+        return holder;
+    }
+    public int[] reverse(int[] arr){
+        
+        int i =0, j = arr.length-1;
+        while(i<j){
+            int temp = arr[i];
+            arr[i]=arr[j];
+            arr[j]=temp;
+            i++;j--;
+        }
+        return arr;
+    }
+}

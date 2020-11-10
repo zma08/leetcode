@@ -1,0 +1,31 @@
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        if(intervals.length==0)return 0;
+        //sort the meetings based on their start time in asc
+        Arrays.sort(intervals,(a,b)->a[0]-b[0]);
+        //heap stores the meeting in ending time asc order, 
+        //so take the end first room so that next one can share
+        PriorityQueue<int[]>heap = new PriorityQueue<>((a,b)->a[1]-b[1]);
+        
+        
+        heap.add(intervals[0]);
+        int count = 1;
+        for(int i = 1; i<intervals.length&& !heap.isEmpty();i++){
+            int[]current = heap.poll();
+            if(current[1]<=intervals[i][0]){
+                //if no overlap then merge them so they can share one room 
+                //and we get a new end time whoever ends later
+                current[1]=Math.max(current[1],intervals[i][1]);
+            }else{
+                //if overlap then can't share one same room count++ and add this room to heap to compare
+                //so we may have an earlier end time possible
+                count++;
+                heap.add(intervals[i]);
+            }
+            //no matter what add the current meeting time to heap 
+            //so next time we get a earlier possible end time to meet the least rooms
+            heap.add(current);
+        }
+        return count;
+    }
+}
