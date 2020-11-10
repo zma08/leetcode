@@ -1,0 +1,45 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        HashMap<Character,Integer>smap = new HashMap<>();
+        HashMap<Character,Integer>tmap = new HashMap<>();
+        
+        for(char c:t.toCharArray()){
+            tmap.put(c,tmap.getOrDefault(c,0)+1);
+        }
+        int lent = tmap.size();
+        int lens = 0;
+        
+        int l=0,r=0;
+        int[]info= new int[]{-1,0,0};//-1: the starting state/length, 0:starting index 0: ending index
+        while(r<s.length()){
+            char c = s.charAt(r);
+            if(tmap.containsKey(c)){
+                smap.put(c,smap.getOrDefault(c,0)+1);
+                if(smap.get(c).intValue()==tmap.get(c).intValue()){
+                    ++lens;
+                    //need a loop to remve all possible chars to get shortest substring
+                    //condition l<=r to include on char case
+                    while(l<=r && lens==lent){
+                        int len = r-l+1;
+                        if(info[0]==-1 || info[0]>len){
+                            info[0]=len;
+                            info[1]=l;
+                            info[2]=r;
+                        }
+                        
+                        char cc = s.charAt(l);
+                        if(smap.containsKey(cc)){
+                            smap.put(cc,smap.get(cc)-1);
+                            if(smap.get(cc)<tmap.get(cc)){
+                                lens--;
+                            }
+                        }
+                        l++;
+                    }
+                }
+            }
+            r++;
+        }
+        return info[0]==-1?"":s.substring(info[1],info[2]+1);
+    }
+}

@@ -1,0 +1,21 @@
+class Solution {
+    public String[] reorderLogFiles(String[] logs) {
+        if(logs.length==0)return logs;
+        Arrays.sort(logs,(log1,log2)->{
+            String[]l1 = log1.split(" ",2);
+            String[]l2 = log2.split(" ",2);
+            
+            boolean d1 = l1[1].charAt(0)-'a'<0;
+            boolean d2 = Character.isDigit(l2[1].charAt(0));
+            
+            if(!d1 && !d2){
+                int comp = l1[1].compareTo(l2[1]);
+                if(comp==0)return l1[0].compareTo(l2[0]);
+                return comp;
+            }else{
+                return d1?(d2?0:1):-1;
+            }
+        });
+        return logs;
+    }
+}

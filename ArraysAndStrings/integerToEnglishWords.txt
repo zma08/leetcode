@@ -1,0 +1,45 @@
+class Solution {
+    String[]ones = 
+        {"","One","Two","Three","Four","Five","Six","Seven","Eight","Nine"};
+        String[]twentyLeft =   {"Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"};
+        String[]twentyRight = 
+        {"","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"};
+        String[]big = {"","Thousand","Million","Billion"};
+    public String numberToWords(int num) {
+        //check Zero
+        if(num==0)return "Zero";
+        
+        int bigPointer = 0;
+        StringBuilder sb = new StringBuilder();
+        while(num!=0){
+            if(num%1000!=0){//takes last 3 digits
+                //process 3 digits at a time in backward sequence
+                sb.insert(0,parse3(num%1000)+" "+big[bigPointer]);//place unit after the real number
+            }            
+            num = num/1000;
+            bigPointer++;
+        }
+        return sb.toString().trim();//alway will have space at the starts and end so trim both
+    }
+    
+    public String parse3(int n){
+        StringBuilder sb = new StringBuilder();
+        if(n>99){
+            sb.append(" "+ones[n/100]+" Hundred");//this is the diff than others need to append unit/hundred
+            n = n%100;
+        }
+        //below twentyleft and twentyright are actually the same step, depends on it is [10,19]or[20,99]
+        if(n>19){
+            sb.append(" "+twentyRight[n/10]);
+            n = n%10;
+        }
+        if(n>9){
+            sb.append(" "+twentyLeft[n%10]);
+            return sb.toString();
+        }
+        if(n>0){
+            sb.append(" "+ones[n]);
+        }
+        return sb.toString();
+    }
+}

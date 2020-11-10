@@ -1,0 +1,18 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+        int len = nums.length;
+        HashSet<Integer>set = new HashSet<>();
+	//when need to use the pointer, need to use before modify, cant do len++>=0
+        while(len>=0){
+            set.add(len);
+            len--;
+        }
+        for(int n : nums){
+            set.remove(n);
+        }
+        for(int s : set){
+            return s;
+        }
+        return -1;
+    }
+}
