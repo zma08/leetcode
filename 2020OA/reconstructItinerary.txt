@@ -1,0 +1,28 @@
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        //this is a directional graph
+        HashMap<String,PriorityQueue<String>>map = new HashMap<>();
+        List<String>l = new ArrayList<>();
+        for(List<String>ticket: tickets){
+            String f = ticket.get(0);
+            String t = ticket.get(1);
+            
+            PriorityQueue<String>e = map.get(f);
+            if(e==null)
+                e = new PriorityQueue<String>();
+            e.add(t);
+            map.put(f,e);
+        }
+        helper("JFK",map,l);
+        Collections.reverse(l);
+        return l;
+    }
+    public void helper(String node,HashMap<String,PriorityQueue<String>> map,List<String>list){
+        PriorityQueue<String> q = map.get(node);
+        while(q!=null && !q.isEmpty()){
+            String next = q.poll();
+            helper(next,map,list);
+        }
+        list.add(node);
+    }
+}

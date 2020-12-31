@@ -1,0 +1,31 @@
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        //reason for using list is that we dont know the size of each list,so array can't be used
+        List<Integer>[]graph = new ArrayList[n];
+       for(int i=0;i<n;i++){
+            graph[i]= new ArrayList<Integer>();
+        }
+        for(int[]e:edges){
+            graph[e[0]].add(e[1]);
+            graph[e[1]].add(e[0]);
+        }
+        boolean[] visited = new boolean[n];
+        int count =0;
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                count++;
+                dfs(i,graph,visited);
+            }
+        }
+        return count;
+    }
+    
+    public void dfs(int node, List<Integer>[]graph, boolean[]visited){
+        visited[node]=true;
+        for(int child:graph[node]){
+            if(!visited[child]){
+                dfs(child,graph,visited);
+            }
+        }
+    }
+}

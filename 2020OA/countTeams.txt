@@ -1,0 +1,33 @@
+//similir with subsets
+List<List<Integer>>list = new ArrayList<>();
+List<Integer>l = new ArrayList<>();
+public int count(int num, int[] skills, int minAssociates,int minLevel, int maxLevel)
+{
+	
+	for(int s : skills){
+		if(s>=minLevel && s<=maxLevel){
+		l.add(s);
+		}
+	}
+	helper(0,new ArrayList<Integer>(),  minAssociates, minLevel, maxLevel);
+	return list.size();	
+}
+public void helper(int index,ArrayList<Integer> current, int minN, int minl, int maxl)
+{
+	if(current.size()>=minN)
+{
+	list.add(new ArrayList<>(current));
+}
+
+	for(int i= index;i<l.size();i++)
+{
+	
+//taking and not taking for combination
+	current.add(l.get(index));
+	helper(i+1,current,minN,minl,maxl);
+	current.remove(current.size()-1);
+	
+	//time complexity of 2^n
+	//space n	
+}
+}

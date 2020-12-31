@@ -1,0 +1,33 @@
+class Solution {
+    private HashMap<String,List<String>>map = new HashMap<>();
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        HashSet<String>set = new HashSet<>();
+        set.addAll(wordDict);
+        return helper(set,s);
+    }
+    public List<String>helper(HashSet<String>set, String s){
+        if(map.containsKey(s))return map.get(s);
+        List<String>list = new ArrayList<>();
+        if(set.contains(s))
+            list.add(s);
+        for(int i=1;i<s.length();i++){
+            String right = s.substring(i);
+            if(!set.contains(right))continue;
+            String left = s.substring(0,i);
+            
+            List<String>innerlist = append(helper(set,left),right);
+            for(String is: innerlist){
+                list.add(is);
+            }
+        }
+        map.put(s,list);
+        return map.get(s);
+    }
+    public List<String>append(List<String>l,String s){
+        List<String>res = new ArrayList<>();
+        for(String ss: l){
+            res.add(ss+" "+s);
+        }
+        return res;
+    }
+}

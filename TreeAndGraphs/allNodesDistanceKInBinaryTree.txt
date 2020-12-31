@@ -1,0 +1,69 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    HashMap<TreeNode,TreeNode> map = new HashMap<>();
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<Integer>list = new ArrayList<>();
+        
+        //1st need to use BFS, most important is able to find he parent node so each node will have left, right, parent to be connected
+        //so first to find each node's parent, with the constant time to access=>hashmap
+       
+        connectParent(root,null);
+        //2nd need to know if a node has been added to the queue structure to avoid duplicate
+        HashSet<TreeNode>seen = new HashSet<>();
+         Queue<TreeNode>queue = new LinkedList<>();
+        queue.add(target);
+        seen.add(target);
+        //when count == k my queue will have all nodes that got k distance to the target
+        int count = 0;
+        while(!queue.isEmpty()){
+            if(count == k){
+                return getNodesWithK(queue,list);
+            }
+            int size = queue.size();
+            while(size-->0){
+                TreeNode current = queue.poll();
+                if(current.left!=null && !seen.contains(current.left)){
+                    queue.add(current.left);
+                    seen.add(current.left);
+                }
+                if(current.right!=null && !seen.contains(current.right)){
+                    queue.add(current.right);
+                    seen.add(current.right);
+                }
+                //now check its parent
+                TreeNode parent =map.get(current); 
+                if(parent!=null && !seen.contains(parent)){
+                    queue.add(parent);
+                    seen.add(parent);
+                }
+            }
+              count++;
+        }
+        //if not return from previous then return empty list
+        return list;
+    }
+    
+    public void connectParent(TreeNode root, TreeNode parent){
+        if(root==null)return;
+        map.put(root,parent);
+        connectParent(root.left,root);
+        connectParent(root.right,root);
+    }
+    public List<Integer> getNodesWithK(Queue<TreeNode> queue, List<Integer>list){
+        for(TreeNode n: queue){
+            list.add(n.val);
+        }
+        return list;
+    }
+    
+    
+    
+}

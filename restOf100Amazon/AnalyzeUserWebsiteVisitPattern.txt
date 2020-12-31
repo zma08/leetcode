@@ -1,0 +1,51 @@
+class Solution {
+    public class Info{
+        int time;
+        String site;
+        public Info(int time, String site){
+            this.time = time;
+            this.site = site;
+        }
+    }
+    //create the pattern
+    public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
+        HashMap<String,List<Info>>map = new HashMap<>();
+        for(int i=0;i<username.length;i++){
+            String user = username[i];
+            if(!map.containsKey(user)){
+                map.put(user,new ArrayList<Info>());
+            }
+            Info info = new Info(timestamp[i],website[i]);
+            map.get(user).add(info);
+        }
+        HashMap<String,Integer>patternCount = new HashMap<>();
+       
+        for(List<Info>i: map.values()){
+            Collections.sort(i,(x,y)->x.time-y.time);
+             HashSet<String>duplicate = new HashSet<>();
+            if(i.size()<3)continue;//has to be more than 3 diff sites
+            for(int a=0;a<i.size()-2;a++){
+                for(int b=a+1;b<i.size()-1;b++){
+                    for(int c=b+1;c<i.size();c++){
+                        String s1 = i.get(a).site;
+                        String s2 = i.get(b).site;
+                        String s3 = i.get(c).site;
+                        //serialize it to a pattern so we can deserialize it later time
+                        String key = s1+" "+s2+" "+s3;
+                        if(duplicate.contains(key))continue;
+                        duplicate.add(key);
+                        patternCount.put(key,patternCount.getOrDefault(key,0)+1);
+                    }
+                }
+            }
+        }
+        PriorityQueue<String>heap = new PriorityQueue<>((a,b)->{
+            int res = patternCount.get(b)==patternCount.get(a)?a.compareTo(b): patternCount.get(b)-patternCount.get(a);
+            return res;
+        });
+        heap.addAll(patternCount.keySet());
+        String[] arr = heap.poll().split(" ");
+        return Arrays.asList(arr);
+        
+    }
+}

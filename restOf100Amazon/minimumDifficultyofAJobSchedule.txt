@@ -1,0 +1,30 @@
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        //in 2 parts, last day with jobs of the max difficulty + d-1 days with jobs min difficulty
+        int n = jobDifficulty.length;
+        if(d>n)return -1;
+        int[][]dp = new int[n+1][d+1];
+        for(int[]cdp:dp){
+            Arrays.fill(cdp,Integer.MAX_VALUE/2);
+        }
+        dp[0][0]=0;
+        //k-1 days VS 1 day
+        for(int i=1;i<=n;i++){
+            for(int k=1;k<=d;k++){
+                 int max = 0;
+                for(int j=i-1;j>=k-1;j--){
+                    //going backwards to have a running max 
+                    //j jobs within k-1 days so j>=k-1=> min of j need to >=k-1
+                    
+                   
+                    max = Math.max(max,jobDifficulty[j]);
+                    dp[i][k]=Math.min(dp[i][k],dp[j][k-1]+max);
+                    //define the dp here:within the j>=k-1 range min difficulty of schedule i jobs within k days()
+                    //=minimum of difficulty k-1 days + max difficulty of last day(days diving not change only the jobs ranges from j+1 to last job(condition j>=k-1))
+                    
+                }
+            }
+        }
+        return dp[n][d];
+    }
+}

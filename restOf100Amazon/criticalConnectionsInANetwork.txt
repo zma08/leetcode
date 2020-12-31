@@ -1,0 +1,50 @@
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+    int[] visitedTime;
+    int[] lowTime;
+    int count = 0;
+    List<Integer>[]graph;
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        visitedTime = new int[n];
+        lowTime = new int[n];
+        graph = new ArrayList[n];
+        for(int i=0;i<graph.length;i++){
+                graph[i]=new ArrayList<>();
+        } 
+        buildGraph(connections);
+        
+        boolean[]visited = new boolean[n];
+        dfs(visited,0,-1);//starting point of parent as -1;
+        return result;
+    }
+    
+    public void dfs(boolean[]visited,int current, int parent){
+        visited[current]=true;
+        visitedTime[current]=lowTime[current]=count++;
+        for(int edge: graph[current]){
+            if(edge==parent)continue; 
+            if(!visited[edge]){                
+                dfs(visited,edge,current);
+                //within the cycle update all nodes lowtime
+                lowTime[current]=Math.min(lowTime[current],lowTime[edge]);
+                //if the lowtime is not updated mean there is no back edge or cycle so this is the solution
+                if(visitedTime[current]<lowTime[edge]){
+                    result.add(Arrays.asList(current,edge));
+                }
+            }else{
+                //a back edge mean there is a cycle so for sure is not the solution
+                lowTime[current]=Math.min(visitedTime[edge],lowTime[current]);
+            }
+        }
+    }
+    
+    public void buildGraph(List<List<Integer>> connections){
+        for(List<Integer> c:connections){
+            int parent = c.get(0);
+            int child = c.get(1);
+           
+            graph[parent].add(child);
+            graph[child].add(parent);
+        }
+    }
+}

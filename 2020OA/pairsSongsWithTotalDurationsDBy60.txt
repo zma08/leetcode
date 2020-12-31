@@ -1,0 +1,14 @@
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        //store all number after %60, and total numbers of item that has same mode from time 
+        HashMap<Integer,Integer>map = new HashMap<>();
+        int count=0;
+        for(int n: time){
+            if(map.containsKey((60-n%60)%60)){//the last %60 is taken care of case 60,60,60
+                count+=map.get((60-n%60)%60);
+            }
+            map.put(n%60,map.getOrDefault(n%60,0)+1);
+        }
+        return count;
+    }
+}
